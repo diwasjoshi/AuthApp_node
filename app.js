@@ -13,6 +13,8 @@ var upload = multer({dest: './uploads'});
 var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
+
 var db = mongoose.connection;
 
 var index = require('./routes/index');
@@ -50,6 +52,11 @@ app.use(flash());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
+});
+
+app.get('*', function(req, res, next){
+    res.locals.user = req.user || null;
+    next();
 });
 
 app.use('/', index);
